@@ -1,6 +1,6 @@
 # WATonomous ASD Admissions Assignment
 
-Team: Gurshaan, Akshay, Yuvraj
+Team: Gurshaan Dhillon, Akshay Gupta, Yuvraj Randhawa
 
 A differential-drive robot in Gazebo drives itself to any point clicked in
 Foxglove while avoiding the walls, boxes and cylinders in the arena. The
@@ -88,7 +88,7 @@ pose and the planner and control logs side by side.
 
 ## Running the unit tests
 
-The core libraries have gtest suites, 39 tests across the four packages, and
+The core libraries have gtest suites, 35 tests across the four packages, and
 the robot image build runs them. To run them yourself inside the robot
 container:
 
@@ -96,6 +96,34 @@ container:
 ./watod -t robot            # open a shell in the robot container
 colcon build && colcon test && colcon test-result --verbose
 ```
+
+## Who did what
+
+We split the pipeline by node and met in Gazebo to make the pieces work
+together.
+
+Yuvraj Randhawa wrote the costmap node (Bresenham ray-tracing, gap filling
+between diverging beams, the lethal disc and exponential inflation), the
+planner (A* with the cost-weighted step, goal snapping, the inflation-band
+escape and the replan rules), the `*_core` / `*_node` split used by every
+package, the `tf_throttle` node, the gtest suites, and the Docker build fixes
+(refreshed ROS apt key, sequential colcon build for small Docker VMs, quoted
+paths for macOS). He also wrote this README and the path-finding Foxglove
+layout.
+
+Akshay Gupta worked on map memory: the fusion rules (fuse after 1 m, 0.5 rad
+or 2 s, skip scans taken while spinning fast) and the timestamped TF lookup
+that places each costmap where the robot was when the scan was taken. He also
+reworked the mapping and shortest-path stack in a separate pass, parts of
+which fed back into the current planner, and he tuned the map memory and
+planner parameters in simulation.
+
+Gurshaan Dhillon worked on control: tuning the pure pursuit lookahead range,
+the speed ramp, the slowdown near the goal and the spin-in-place hysteresis
+until the robot stopped oscillating between turning and driving. He ran the
+end-to-end tests in Gazebo and Foxglove, moved the spawn point and goals
+around the arena to find failures, and recorded the demo video for the
+submission.
 
 ## Repository layout
 
