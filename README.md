@@ -99,28 +99,23 @@ colcon build && colcon test && colcon test-result --verbose
 
 ## Who did what
 
-Yuvraj Randhawa designed and implemented the navigation stack: the costmap
-node (Bresenham ray-tracing, gap filling between diverging beams, the lethal
-disc and exponential inflation), map memory (the fusion rules and the
-timestamped TF lookup that places each costmap where the robot was when the
-scan was taken), the planner (A* with the cost-weighted step, goal snapping,
-the inflation-band escape and the replan rules) and the pure pursuit
-controller (adaptive lookahead, speed shaping and spin-in-place with
-hysteresis). He also set up the `*_core` / `*_node` split used by every
-package, wrote the `tf_throttle` node and the 35 gtests, fixed the Docker
-build (refreshed ROS apt key, sequential colcon build for small Docker VMs,
-quoted paths for macOS), and wrote this README and the path-finding Foxglove
-layout.
+Yuvraj wrote the four nodes. The costmap, map memory, planner and controller
+are his code, from the ray-tracing and inflation in the costmap through the
+timestamped fusion in map memory to the A* planner and the pure pursuit
+controller with its spin-in-place logic. He split each package into a core
+library and a ROS node, wrote `tf_throttle` and the 35 gtests, and got the
+Docker build working again after the ROS apt key expired and a full parallel
+build kept running the Docker VM out of memory. The README and the
+path-finding Foxglove layout are his as well.
 
-Akshay Gupta tuned the map memory thresholds in `config/params.yaml` (fuse
-after 1 m, 0.5 rad or 2 s, and the yaw-rate cutoff for skipping scans taken
-while spinning) and tried an alternative shortest-path pass on the mapping
+Akshay tuned the map memory thresholds in `config/params.yaml`, the 1 m,
+0.5 rad and 2 s fusion triggers and the yaw-rate cutoff for scans taken
+mid-spin. He also tried a different shortest-path approach on the mapping
 side that was later folded back into the main stack.
 
-Gurshaan Dhillon tuned the control parameters (lookahead range, cruising
-speed and the slowdown distance near the goal), ran the end-to-end tests in
-Gazebo and Foxglove with goals placed around the arena, and recorded the
-demo video for the submission.
+Gurshaan tuned the control parameters, mainly the lookahead range, cruising
+speed and slowdown distance, drove the robot around the arena in Gazebo and
+Foxglove to find where it failed, and recorded the demo video.
 
 ## Repository layout
 
