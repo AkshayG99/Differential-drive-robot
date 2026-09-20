@@ -99,31 +99,28 @@ colcon build && colcon test && colcon test-result --verbose
 
 ## Who did what
 
-We split the pipeline by node and met in Gazebo to make the pieces work
-together.
-
-Yuvraj Randhawa wrote the costmap node (Bresenham ray-tracing, gap filling
-between diverging beams, the lethal disc and exponential inflation), the
-planner (A* with the cost-weighted step, goal snapping, the inflation-band
-escape and the replan rules), the `*_core` / `*_node` split used by every
-package, the `tf_throttle` node, the gtest suites, and the Docker build fixes
-(refreshed ROS apt key, sequential colcon build for small Docker VMs, quoted
-paths for macOS). He also wrote this README and the path-finding Foxglove
+Yuvraj Randhawa designed and implemented the navigation stack: the costmap
+node (Bresenham ray-tracing, gap filling between diverging beams, the lethal
+disc and exponential inflation), map memory (the fusion rules and the
+timestamped TF lookup that places each costmap where the robot was when the
+scan was taken), the planner (A* with the cost-weighted step, goal snapping,
+the inflation-band escape and the replan rules) and the pure pursuit
+controller (adaptive lookahead, speed shaping and spin-in-place with
+hysteresis). He also set up the `*_core` / `*_node` split used by every
+package, wrote the `tf_throttle` node and the 35 gtests, fixed the Docker
+build (refreshed ROS apt key, sequential colcon build for small Docker VMs,
+quoted paths for macOS), and wrote this README and the path-finding Foxglove
 layout.
 
-Akshay Gupta worked on map memory: the fusion rules (fuse after 1 m, 0.5 rad
-or 2 s, skip scans taken while spinning fast) and the timestamped TF lookup
-that places each costmap where the robot was when the scan was taken. He also
-reworked the mapping and shortest-path stack in a separate pass, parts of
-which fed back into the current planner, and he tuned the map memory and
-planner parameters in simulation.
+Akshay Gupta tuned the map memory thresholds in `config/params.yaml` (fuse
+after 1 m, 0.5 rad or 2 s, and the yaw-rate cutoff for skipping scans taken
+while spinning) and tried an alternative shortest-path pass on the mapping
+side that was later folded back into the main stack.
 
-Gurshaan Dhillon worked on control: tuning the pure pursuit lookahead range,
-the speed ramp, the slowdown near the goal and the spin-in-place hysteresis
-until the robot stopped oscillating between turning and driving. He ran the
-end-to-end tests in Gazebo and Foxglove, moved the spawn point and goals
-around the arena to find failures, and recorded the demo video for the
-submission.
+Gurshaan Dhillon tuned the control parameters (lookahead range, cruising
+speed and the slowdown distance near the goal), ran the end-to-end tests in
+Gazebo and Foxglove with goals placed around the arena, and recorded the
+demo video for the submission.
 
 ## Repository layout
 
