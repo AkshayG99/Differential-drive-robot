@@ -97,26 +97,6 @@ container:
 colcon build && colcon test && colcon test-result --verbose
 ```
 
-## Who did what
-
-Yuvraj wrote the four nodes. The costmap, map memory, planner and controller
-are his code, from the ray-tracing and inflation in the costmap through the
-timestamped fusion in map memory to the A* planner and the pure pursuit
-controller with its spin-in-place logic. He split each package into a core
-library and a ROS node, wrote `tf_throttle` and the 35 gtests, and got the
-Docker build working again after the ROS apt key expired and a full parallel
-build kept running the Docker VM out of memory. The README and the
-path-finding Foxglove layout are his as well.
-
-Akshay tuned the map memory thresholds in `config/params.yaml`, the 1 m,
-0.5 rad and 2 s fusion triggers and the yaw-rate cutoff for scans taken
-mid-spin. He also tried a different shortest-path approach on the mapping
-side that was later folded back into the main stack.
-
-Gurshaan tuned the control parameters, mainly the lookahead range, cruising
-speed and slowdown distance, drove the robot around the arena in Gazebo and
-Foxglove to find where it failed, and recorded the demo video.
-
 ## Repository layout
 
 Everything outside `src/robot/{costmap,map_memory,planner,control,tf_throttle}`
