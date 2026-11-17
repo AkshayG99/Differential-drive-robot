@@ -1,4 +1,4 @@
-# WATonomous ASD Admissions Assignment
+# Differential Drive Robot
 
 Team: Gurshaan Dhillon, Akshay Gupta, Yuvraj Randhawa
 
